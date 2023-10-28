@@ -25,16 +25,16 @@ public actor PersistentCache<Payload: Codable>: Cache {
         return Date(timeIntervalSince1970: interval)
     }
     
-    var current: DataResult<Payload> {
+    public var current: DataResult<Payload> {
         self.get()
     }
     
-    init(lifetime: TimeInterval, file: URL) {
+    public init(lifetime: TimeInterval, file: URL) {
         self.lifetime = lifetime
         self.file = file
     }
     
-    func set(_ payload: Payload) async throws {
+    public func set(_ payload: Payload) async throws {
         do {
             let data = try JSONEncoder().encode(payload)
             try data.write(to: file)
@@ -45,7 +45,16 @@ public actor PersistentCache<Payload: Codable>: Cache {
         }
     }
     
-    private func get() -> DataResult<Payload> {
+    public func clear(_: Bool) {
+        do {
+            try FileManager.default.removeItem(at: file)
+            defaults.removeObject(forKey: key)
+        } catch {
+            print(String(describing: error))
+        }
+    }
+    
+    func get() -> DataResult<Payload> {
         do {
             guard !expired else { return .uninitialized }
             let data = try Data(contentsOf: file)
@@ -53,15 +62,6 @@ public actor PersistentCache<Payload: Codable>: Cache {
             return .success(payload)
         } catch {
             return .uninitialized
-        }
-    }
-    
-    func clear(_: Bool) {
-        do {
-            try FileManager.default.removeItem(at: file)
-            defaults.removeObject(forKey: key)
-        } catch {
-            print(String(describing: error))
         }
     }
     

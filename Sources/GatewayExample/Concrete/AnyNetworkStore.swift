@@ -12,12 +12,12 @@ public actor AnyNetworkStore<Payload: Decodable>: NetworkStore {
     var url: URL
     var timeout: TimeInterval
     
-    init(url: URL, timeout: TimeInterval = 15) {
+    public init(url: URL, timeout: TimeInterval = 15) {
         self.url = url
         self.timeout = timeout
     }
     
-    func fetch() async throws -> Payload {
+    public func fetch() async throws -> Payload {
         let request = URLRequest(url: url, timeoutInterval: timeout)
         let (data, response) = try await URLSession.shared.data(for: request)
         

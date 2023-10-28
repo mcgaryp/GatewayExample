@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Repository<Payload> {
+public protocol Repository<Payload> {
     associatedtype Payload: Codable
     
     func get() async throws -> Payload

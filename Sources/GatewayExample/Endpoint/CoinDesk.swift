@@ -7,26 +7,26 @@
 
 import Foundation
 
-struct CoinDesk: Codable, Equatable {
+public struct CoinDesk: Codable, Equatable {
     var time: Time
     var disclaimer: String
     var chartName: String
     var bpi: BPI
 }
 
-struct Time: Codable, Equatable {
+public struct Time: Codable, Equatable {
     var updated: String
     var updatedISO: String
     var updateduk: String
 }
 
-struct BPI: Codable, Equatable {
+public struct BPI: Codable, Equatable {
     var USD: BPIObject
     var GBP: BPIObject
     var EUR: BPIObject
 }
 
-struct BPIObject: Codable, Equatable {
+public struct BPIObject: Codable, Equatable {
     var code: String
     var symbol: String
     var rate: String

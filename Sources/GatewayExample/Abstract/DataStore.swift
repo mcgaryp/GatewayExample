@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol DataStore<Payload> {
+public protocol DataStore<Payload> {
     associatedtype Payload: Codable
     
     var cache: any Cache<Payload> { get async }
@@ -15,4 +15,10 @@ protocol DataStore<Payload> {
     
     func set(_: Payload) async
     func clear(_: Bool) async
+}
+
+public extension DataStore {
+    func clear(cache: Bool = false) async {
+        await clear(cache)
+    }
 }

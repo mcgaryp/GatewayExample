@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Cache<Payload> {
+public protocol Cache<Payload> {
     associatedtype Payload: Codable
     
     var current: DataResult<Payload> { get async }
@@ -16,7 +16,7 @@ protocol Cache<Payload> {
     func clear(_: Bool) async
 }
 
-extension Cache {
+public extension Cache {
     func clear(cache: Bool = false) async {
         await clear(cache)
     }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol NetworkStore<Payload> {
+public protocol NetworkStore<Payload> {
     associatedtype Payload: Decodable
     
     func fetch() async throws -> Payload

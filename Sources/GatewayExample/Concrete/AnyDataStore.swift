@@ -9,15 +9,15 @@ import Foundation
 
 public actor AnyDataStore<Payload: Codable>: DataStore {
     
-    @Published var current: DataResult<Payload> = .uninitialized
+    @Published public var current: DataResult<Payload> = .uninitialized
     
-    var cache: any Cache<Payload>
+    public var cache: any Cache<Payload>
     
-    init(cache: any Cache<Payload>) {
+    public init(cache: any Cache<Payload>) {
         self.cache = cache
     }
     
-    func set(_ payload: Payload) async {
+    public func set(_ payload: Payload) async {
         do {
             try await cache.set(payload)
             current = await cache.current
@@ -26,7 +26,7 @@ public actor AnyDataStore<Payload: Codable>: DataStore {
         }
     }
     
-    func clear(_ persistent: Bool) async {
+    public func clear(_ persistent: Bool) async {
         await cache.clear(persistent)
         current = await cache.current
     }
