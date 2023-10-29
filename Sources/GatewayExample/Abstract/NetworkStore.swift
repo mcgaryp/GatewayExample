@@ -8,7 +8,15 @@
 import Foundation
 
 public protocol NetworkStore<Payload> {
-    associatedtype Payload: Decodable
+    associatedtype Payload
     
     func fetch() async throws -> Payload
+}
+
+public protocol NetworkPayload {
+    associatedtype Capture: Decodable
+    
+    init(_: Capture)
+    
+    func toCapture() -> Capture
 }

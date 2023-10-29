@@ -21,7 +21,7 @@ actor FailableDataStore<Payload: Codable>: DataStore {
     
     func set(_ payload: Payload) async {
         if shouldFail {
-            current = .failure(CacheError.failedToStore)
+            current = .failure(GatewayError.failedToStore)
         }
         current = .success(payload)
     }

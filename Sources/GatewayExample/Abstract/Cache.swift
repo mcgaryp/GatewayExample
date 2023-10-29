@@ -21,7 +21,3 @@ public extension Cache {
         await clear(cache)
     }
 }
-
-public enum CacheError: Error {
-    case failedToStore
-}

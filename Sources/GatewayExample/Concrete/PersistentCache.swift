@@ -41,7 +41,7 @@ public actor PersistentCache<Payload: Codable>: Cache {
             let date = Date(timeIntervalSinceNow: lifetime)
             defaults.set(date.timeIntervalSince1970, forKey: key)
         } catch {
-            throw CacheError.failedToStore
+            throw GatewayError.failedToStore
         }
     }
     

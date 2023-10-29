@@ -13,10 +13,14 @@ final class RepositoryTests: XCTestCase {
         let networkURL = URL(string: "https://api.coindesk.com/v1/bpi/currentprice.json")!
         let fileURL = FileManager.default.temporaryDirectory.appending(path: "coindesk.json")
         perCache = PersistentCache(lifetime: 60, file: fileURL)
-        memCache = InMemoryCache(persistant: perCache)
+        memCache = InMemoryCache(persistent: perCache)
         store = AnyDataStore(cache: memCache)
         network = AnyNetworkStore(url: networkURL)
         repository = AnyRepository(store: store, network: network)
+    }
+    
+    func textSinkCloud() throws {
+        throw XCTSkip("TODO")
     }
     
     func testSuccessfulGet() async {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public actor AnyNetworkStore<Payload: Decodable>: NetworkStore {
+public actor AnyNetworkStore<Payload: NetworkPayload>: NetworkStore {
     
     var url: URL
     var timeout: TimeInterval
@@ -25,8 +25,8 @@ public actor AnyNetworkStore<Payload: Decodable>: NetworkStore {
               httpResponse.statusCode == 200
         else { throw NSError() }
         
-        let payload = try JSONDecoder().decode(Payload.self, from: data)
-        return payload
+        let capture = try JSONDecoder().decode(Payload.Capture.self, from: data)
+        return Payload(capture)
     }
     
 }

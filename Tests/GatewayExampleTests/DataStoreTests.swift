@@ -18,7 +18,7 @@ final class DataStoreTests: XCTestCase {
         store = AnyDataStore(cache: cache)
         let fileURL = FileManager.default.temporaryDirectory.appending(path: "int.json")
         let persistentCache = PersistentCache<Int>(lifetime: 15, file: fileURL)
-        let cacheWithPersistentCache = InMemoryCache(persistant: persistentCache)
+        let cacheWithPersistentCache = InMemoryCache(persistent: persistentCache)
         storeWithPersistent = AnyDataStore(cache: cacheWithPersistentCache)
     }
     
@@ -58,7 +58,7 @@ final class DataStoreTests: XCTestCase {
         
         await store.set(5)
         XCTAssertEqual(count, 6)
-        XCTAssertEqual(result, .failure(CacheError.failedToStore))
+        XCTAssertEqual(result, .failure(GatewayError.failedToStore))
         
         await (store.cache as? FailableCache<Int>)?.setToSucceed()
         
@@ -96,7 +96,7 @@ final class DataStoreTests: XCTestCase {
         
         await store.set(5)
         result = await store.current
-        XCTAssertEqual(result, .failure(CacheError.failedToStore))
+        XCTAssertEqual(result, .failure(GatewayError.failedToStore))
     }
     
     func testSuccessfulClear() async {
@@ -117,12 +117,23 @@ final class DataStoreTests: XCTestCase {
         XCTAssertEqual(result, .uninitialized)
     }
     
-    func testFailedClear() throws {
+    func testFailedClear() async {
+        store = AnyDataStore(cache: FailableCache())
+        var result = await store.current
+        XCTAssertEqual(result, .uninitialized)
         
+        await store.set(5)
+        result = await store.current
+        XCTAssertEqual(result, .success(5))
+        
+        await (store.cache as? FailableCache<Int>)?.setToFail()
+        
+        await store.clear()
+        XCTAssertEqual(result, .success(5))
     }
     
     func testPublisherWithPersistentCache() async throws {
-        storeWithPersistent = AnyDataStore(cache: InMemoryCache(persistant: FailableCache()))
+        storeWithPersistent = AnyDataStore(cache: InMemoryCache(persistent: FailableCache()))
         var count = 0
         var result: DataResult<Int> = await storeWithPersistent.current
         let cancellable = await storeWithPersistent.$current.sink { value in
@@ -161,7 +172,7 @@ final class DataStoreTests: XCTestCase {
         
         await storeWithPersistent.set(5)
         XCTAssertEqual(count, 7)
-        XCTAssertEqual(result, .failure(CacheError.failedToStore))
+        XCTAssertEqual(result, .failure(GatewayError.failedToStore))
         
         await ((storeWithPersistent.cache as? InMemoryCache<Int>)?.cache as? FailableCache<Int>)?.setToSucceed()
         
@@ -204,8 +215,14 @@ final class DataStoreTests: XCTestCase {
         }
     }
     
-    func testFailedSetWithPersistentCache() throws {
-        throw XCTSkip("TODO")
+    func testFailedSetWithPersistentCache() async {
+        storeWithPersistent = AnyDataStore(cache: InMemoryCache(persistent: FailableCache(shouldFail: true)))
+        var result = await storeWithPersistent.current
+        XCTAssertEqual(result, .uninitialized)
+        
+        await storeWithPersistent.set(5)
+        result = await storeWithPersistent.current
+        XCTAssertEqual(result, .failure(GatewayError.failedToStore))
     }
     
     func testSuccessfulClearWithPersistentCacheSetFalse() async {
@@ -244,8 +261,29 @@ final class DataStoreTests: XCTestCase {
         XCTAssertEqual(result, .uninitialized)
     }
     
-    func testFailedClearWithPersistentCache() throws {
-        throw XCTSkip("TODO")
+    func testFailedClearWithPersistentCache() async {
+        storeWithPersistent = AnyDataStore(cache: InMemoryCache(persistent: FailableCache()))
+        var result = await storeWithPersistent.current
+        XCTAssertEqual(result, .uninitialized)
+        
+        await storeWithPersistent.set(5)
+        result = await storeWithPersistent.current
+        XCTAssertEqual(result, .success(5))
+        
+        await (storeWithPersistent.cache as? FailableCache<Int>)?.setToFail()
+        
+        await storeWithPersistent.clear(cache: true)
+        XCTAssertEqual(result, .success(5))
+        
+        await (storeWithPersistent.cache as? FailableCache<Int>)?.setToSucceed()
+        
+        await storeWithPersistent.set(7)
+        XCTAssertEqual(result, .success(7))
+        
+        await (storeWithPersistent.cache as? FailableCache<Int>)?.setToFail()
+        
+        await storeWithPersistent.clear()
+        XCTAssertEqual(result, .success(7))
     }
     
 }

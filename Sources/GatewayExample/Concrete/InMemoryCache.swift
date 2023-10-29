@@ -26,7 +26,7 @@ public actor InMemoryCache<Payload: Codable>: Cache {
     
     var cache: (any Cache<Payload>)?
     
-    public init(persistant cache: (any Cache<Payload>)? = nil) {
+    public init(persistent cache: (any Cache<Payload>)? = nil) {
         self.cache = cache
     }
     

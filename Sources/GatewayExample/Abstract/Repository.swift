@@ -15,3 +15,4 @@ public protocol Repository<Payload> {
     func refresh() async throws -> Payload
     func clear(cache: Bool) async
 }
+

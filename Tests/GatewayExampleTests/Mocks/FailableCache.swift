@@ -19,7 +19,7 @@ actor FailableCache<Payload: Codable>: Cache {
     
     func set(_ payload: Payload) async throws {
         if shouldFail {
-            throw CacheError.failedToStore
+            throw GatewayError.failedToStore
         }
         current = .success(payload)
     }

@@ -57,7 +57,7 @@ final class InMemoryCacheTests: XCTestCase {
     func testSuccessfulSetWithPersistentCache() async {
         let fileURL = FileManager.default.temporaryDirectory.appending(path: "int-1.json")
         let persistentCache = PersistentCache<Int>(lifetime: 15, file: fileURL)
-        let cacheWithPersistent = InMemoryCache<Int>(persistant: persistentCache)
+        let cacheWithPersistent = InMemoryCache<Int>(persistent: persistentCache)
         
         var result = await cacheWithPersistent.current
         XCTAssertEqual(result, .uninitialized)
@@ -76,13 +76,13 @@ final class InMemoryCacheTests: XCTestCase {
         throw XCTSkip("TODO")
         let fileURL = FileManager.default.temporaryDirectory.appending(path: "int-2.json")
         let persistentCache = PersistentCache<Int>(lifetime: 15, file: fileURL)
-        let cacheWithPersistent = InMemoryCache<Int>(persistant: persistentCache)
+        let cacheWithPersistent = InMemoryCache<Int>(persistent: persistentCache)
     }
     
     func testSuccessfulClearWithPersistentCacheSetToFalse() async {
         let fileURL = FileManager.default.temporaryDirectory.appending(path: "int-3.json")
         let persistentCache = PersistentCache<Int>(lifetime: 15, file: fileURL)
-        let cacheWithPersistent = InMemoryCache<Int>(persistant: persistentCache)
+        let cacheWithPersistent = InMemoryCache<Int>(persistent: persistentCache)
         
         var result = await cacheWithPersistent.current
         XCTAssertEqual(result, .uninitialized)
@@ -105,7 +105,7 @@ final class InMemoryCacheTests: XCTestCase {
     func testSuccessfulClearWithPersistentCacheSetToTrue() async {
         let fileURL = FileManager.default.temporaryDirectory.appending(path: "int-4.json")
         let persistentCache = PersistentCache<Int>(lifetime: 15, file: fileURL)
-        let cacheWithPersistent = InMemoryCache<Int>(persistant: persistentCache)
+        let cacheWithPersistent = InMemoryCache<Int>(persistent: persistentCache)
         
         var result = await cacheWithPersistent.current
         XCTAssertEqual(result, .uninitialized)
@@ -129,7 +129,7 @@ final class InMemoryCacheTests: XCTestCase {
         throw XCTSkip("TODO")
         let fileURL = FileManager.default.temporaryDirectory.appending(path: "int-5.json")
         let persistentCache = PersistentCache<Int>(lifetime: 15, file: fileURL)
-        let cacheWithPersistent = InMemoryCache<Int>(persistant: persistentCache)
+        let cacheWithPersistent = InMemoryCache<Int>(persistent: persistentCache)
     }
     
 }
