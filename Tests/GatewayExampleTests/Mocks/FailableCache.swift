@@ -8,32 +8,32 @@
 import Foundation
 import GatewayExample
 
-actor FailableCache<Payload: Codable>: Cache {
-    
-    var shouldFail: Bool
-    var current: DataResult<Payload> = .uninitialized
-    
-    init(shouldFail: Bool = false) {
-        self.shouldFail = shouldFail
-    }
-    
-    func set(_ payload: Payload) async throws {
-        if shouldFail {
-            throw GatewayError.failedToStore
-        }
-        current = .success(payload)
-    }
-    
-    func clear(_: Bool) async {
-        guard !shouldFail else { return }
-        current = .uninitialized
-    }
-    
-    func setToFail() {
-        shouldFail = true
-    }
-    
-    func setToSucceed() {
-        shouldFail = false
-    }
-}
+//actor FailableCache<Payload: Codable>: Cache {
+//    
+//    var shouldFail: Bool
+//    var current: DataResult<Payload> = .uninitialized
+//    
+//    init(shouldFail: Bool = false) {
+//        self.shouldFail = shouldFail
+//    }
+//    
+//    func set(_ payload: Payload) async throws {
+//        if shouldFail {
+//            throw GatewayError.failedToStore
+//        }
+//        current = .success(payload)
+//    }
+//    
+//    func clear(_: Bool) async {
+//        guard !shouldFail else { return }
+//        current = .uninitialized
+//    }
+//    
+//    func setToFail() {
+//        shouldFail = true
+//    }
+//    
+//    func setToSucceed() {
+//        shouldFail = false
+//    }
+//}

@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol Repository<Payload> {
-    associatedtype Payload: Codable
+    associatedtype Payload
     
     func get() async throws -> Payload
     func set(_: Payload) async

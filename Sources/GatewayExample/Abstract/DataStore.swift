@@ -6,19 +6,13 @@
 //
 
 import Foundation
+import Combine
 
 public protocol DataStore<Payload> {
-    associatedtype Payload: Codable
+    associatedtype Payload
     
-    var cache: any Cache<Payload> { get async }
-    var current: DataResult<Payload> { get async }
+    var publisher: AnyPublisher<DataResult<Payload>, Never> { get }
     
-    func set(_: Payload) async
-    func clear(_: Bool) async
-}
-
-public extension DataStore {
-    func clear(cache: Bool = false) async {
-        await clear(cache)
-    }
+    func sink(_: AnyPublisher<DataResult<Payload>, Never>) async
+    func refresh() async -> DataResult<Payload>
 }

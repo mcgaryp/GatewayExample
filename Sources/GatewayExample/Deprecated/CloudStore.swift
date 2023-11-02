@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+@available(*, deprecated)
 public protocol CloudStore<Payload> {
     associatedtype Payload
     

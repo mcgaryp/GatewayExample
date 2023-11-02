@@ -7,6 +7,7 @@
 
 import Foundation
 
+@available(*, deprecated)
 public protocol NetworkStore<Payload> {
     associatedtype Payload
     
